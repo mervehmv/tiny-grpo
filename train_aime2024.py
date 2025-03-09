@@ -247,7 +247,9 @@ def main():
     pad_token_id = tokenizer.eos_token_id
 
     dataset = load_dataset("di-zhang-fdu/AIME_1983_2024")
-    train_data = dataset["train"]
+    # Remove None values before creating DataLoader
+    train_data = [item for item in dataset["train"] if item is not None]
+
 
     prompt_loader = DataLoader(
         train_data,
