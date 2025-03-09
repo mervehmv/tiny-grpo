@@ -16,6 +16,7 @@ from transformers import (
     LlamaForCausalLM,
     GenerationConfig,
 )
+from datasets import load_dataset
 from loss import approx_kl_divergence, GRPOLoss
 from replay_buffer import ReplayBuffer, Experience, join_experience_batch
 
@@ -119,6 +120,16 @@ def rollout(
         )
 
         answer = answer_match.group(1) if answer_match else None
+
+        think_match = re.search(
+            r"<think>(.*?)<answer>",
+            completion,
+            flags=re.DOTALL,
+        )
+
+        think = think_match.group(1) if think_match else None
+
+
         reward = 0
         if answer is not None:
             if answer == oracle_answer:
@@ -130,7 +141,7 @@ def rollout(
 
         returns[i] = reward
 
-    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions
+    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, think
 
 
 def init_rng(seed: int) -> torch.Generator:
@@ -193,10 +204,10 @@ def read_prompts(
 
 def main():
     seed = 42
-    wandb_project = None  # "tiny_grpo"
+    wandb_project = "tiny_grpo_gsmk8_v2"
     device_index = 0
     model_name = "meta-llama/Llama-3.2-1B-Instruct"
-    checkpoint_path = Path("./output")
+    checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-gsmk8/output")
     checkpoint_interval = 20
     train_batch_size = 16
     lr = 5e-6
@@ -228,16 +239,11 @@ def main():
 
     pad_token_id = tokenizer.eos_token_id
 
-    prompts = read_prompts(
-        "data/math_tasks.jsonl",
-        predicate=lambda x: len(x["question"]) < 128
-        and x["num_terms"] <= 3
-        and x["num_digits"] <= 3,
-        max_rows=64 * 1024,
-    )
-    print(f"found {len(prompts)} matching prompts")
+    dataset = load_dataset("gsm8k", "main")
+    train_data = dataset["train"]
+
     prompt_loader = DataLoader(
-        prompts,
+        train_data,
         batch_size=rollouts_per_step,
         shuffle=True,
         drop_last=True,
@@ -251,111 +257,116 @@ def main():
         wandb.init(mode="disabled")
     else:
         wandb.init(project=wandb_project)
+    with open("/content/drive/MyDrive/tiny-grpo-gsmk8/thought_processes.txt", "a", encoding="utf-8") as file:
+        for k, prompt_batch in enumerate(prompt_loader):
+            file.write(f"Step{k}\n\n")
+            rollout_returns = []
 
-    for k, prompt_batch in enumerate(prompt_loader):
-        rollout_returns = []
+            replay_buffer.clear()
 
-        replay_buffer.clear()
+            questions = prompt_batch["question"]
+            answers = prompt_batch["answer"]
 
-        questions = prompt_batch["question"]
-        answers = prompt_batch["answer"]
+            with torch.no_grad():
+                for q, an in zip(questions, answers):
+                    a = re.findall(r"####\s*(.*)", an)
 
-        with torch.no_grad():
-            for q, a in zip(questions, answers):
-                sequence_ids, returns, action_mask, completions = rollout(
-                    model,
-                    tokenizer,
-                    q,
-                    a,
-                    num_rollouts=group_size,
-                    max_length=max_length,
-                    temperature=temperature,
-                    top_p=top_p,
-                )
+                    sequence_ids, returns, action_mask, completions, think = rollout(
+                        model,
+                        tokenizer,
+                        q,
+                        a,
+                        num_rollouts=group_size,
+                        max_length=max_length,
+                        temperature=temperature,
+                        top_p=top_p,
+                    )
 
-                print(
-                    f"rollout q='{q}', a='{a}', returns={returns.sum().item():.2f}, replay_buffer_size={len(replay_buffer)}, sequence_ids={sequence_ids.shape}"
-                )
-                rollout_returns.append(returns.cpu())
+                    print(
+                        f"rollout q='{q}', a='{a}', returns={returns.sum().item():.2f}, replay_buffer_size={len(replay_buffer)}, sequence_ids={sequence_ids.shape}"
+                    )
 
-                advantages = group_advantages(returns)
-                attention_mask = sequence_ids != pad_token_id
+                    file.write(f"Question\n{q}\nThink\n{think}\nAnswer\n{a}\n\n")
+                    rollout_returns.append(returns.cpu())
 
-                log_probs = sequences_log_probs(
-                    model=model,
-                    sequence_ids=sequence_ids,
-                    attention_mask=attention_mask,
-                )
-                log_probs_ref = sequences_log_probs(
-                    model=reference_model,
-                    sequence_ids=sequence_ids,
-                    attention_mask=attention_mask,
-                )
-                kl = approx_kl_divergence(
-                    log_probs=log_probs,
-                    log_probs_ref=log_probs_ref,
-                    action_mask=action_mask,
-                )
+                    advantages = group_advantages(returns)
+                    attention_mask = sequence_ids != pad_token_id
 
-                experience = Experience(
-                    sequences=sequence_ids,
-                    action_log_probs=log_probs,
-                    log_probs_ref=log_probs_ref,
-                    returns=returns,
-                    advantages=advantages,
-                    attention_mask=attention_mask,
-                    action_mask=action_mask,
-                    kl=kl,
-                )
-                replay_buffer.append(experience.to(cpu_device))
+                    log_probs = sequences_log_probs(
+                        model=model,
+                        sequence_ids=sequence_ids,
+                        attention_mask=attention_mask,
+                    )
+                    log_probs_ref = sequences_log_probs(
+                        model=reference_model,
+                        sequence_ids=sequence_ids,
+                        attention_mask=attention_mask,
+                    )
+                    kl = approx_kl_divergence(
+                        log_probs=log_probs,
+                        log_probs_ref=log_probs_ref,
+                        action_mask=action_mask,
+                    )
 
-        torch.cuda.empty_cache()
-        episode_return_sum = torch.stack(rollout_returns).sum()
-        print(f"returns of step {k}: {episode_return_sum:.4f}")
-        wandb.log({"returns": episode_return_sum})
+                    experience = Experience(
+                        sequences=sequence_ids,
+                        action_log_probs=log_probs,
+                        log_probs_ref=log_probs_ref,
+                        returns=returns,
+                        advantages=advantages,
+                        attention_mask=attention_mask,
+                        action_mask=action_mask,
+                        kl=kl,
+                    )
+                    replay_buffer.append(experience.to(cpu_device))
 
-        experience_sampler = DataLoader(
-            replay_buffer,
-            batch_size=train_batch_size,
-            shuffle=True,
-            drop_last=True,
-            collate_fn=join_experience_batch,
-        )
+            torch.cuda.empty_cache()
+            episode_return_sum = torch.stack(rollout_returns).sum()
+            print(f"returns of step {k}: {episode_return_sum:.4f}")
+            wandb.log({"returns": episode_return_sum})
 
-        for step_epoch in range(epochs_per_step):
-            model.train()
+            experience_sampler = DataLoader(
+                replay_buffer,
+                batch_size=train_batch_size,
+                shuffle=True,
+                drop_last=True,
+                collate_fn=join_experience_batch,
+            )
 
-            for exp in experience_sampler:
-                exp: Experience
+            for step_epoch in range(epochs_per_step):
+                model.train()
 
-                exp = exp.to(device)
+                for exp in experience_sampler:
+                    exp: Experience
 
-                optimizer.zero_grad()
+                    exp = exp.to(device)
 
-                log_probs = sequences_log_probs(
-                    model, sequence_ids=exp.sequences, attention_mask=exp.attention_mask
-                )
+                    optimizer.zero_grad()
 
-                loss, kl = objective(log_probs=log_probs, experience=exp)
+                    log_probs = sequences_log_probs(
+                        model, sequence_ids=exp.sequences, attention_mask=exp.attention_mask
+                    )
 
-                if not loss.isfinite():
-                    print(f"Loss not finite, skipping backward, loss={loss}")
-                    print(f"experience.advantages={experience.advantages}")
-                    continue
+                    loss, kl = objective(log_probs=log_probs, experience=exp)
 
-                loss.backward()
-                grad_norm = clip_grad_norm_(model.parameters(), max_norm=max_norm)
-                print(f"{step_epoch}: kl={kl: .4f}, grad_norm={grad_norm: .4f}")
-                wandb.log({"kl": kl, "grad_norm": grad_norm})
+                    if not loss.isfinite():
+                        print(f"Loss not finite, skipping backward, loss={loss}")
+                        print(f"experience.advantages={experience.advantages}")
+                        continue
 
-                optimizer.step()
+                    loss.backward()
+                    grad_norm = clip_grad_norm_(model.parameters(), max_norm=max_norm)
+                    print(f"{step_epoch}: kl={kl: .4f}, grad_norm={grad_norm: .4f}")
+                    wandb.log({"kl": kl, "grad_norm": grad_norm})
 
-        if (
-            checkpoint_path is not None
-            and checkpoint_interval is not None
-            and (k + 1) % checkpoint_interval == 0
-        ):
-            model.save_pretrained(checkpoint_path / f"step_{k}")
+                    optimizer.step()
+
+            if (
+                checkpoint_path is not None
+                and checkpoint_interval is not None
+                and (k + 1) % checkpoint_interval == 0
+            ):
+                model.save_pretrained(checkpoint_path / f"step_{k}")
 
     if checkpoint_path is not None:
         model.save_pretrained(checkpoint_path / f"step_{k}")
