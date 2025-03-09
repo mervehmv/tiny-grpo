@@ -269,7 +269,7 @@ def main():
 
             with torch.no_grad():
                 for q, an in zip(questions, answers):
-                    a = re.findall(r"####\s*(.*)", an)
+                    a = re.findall(r"####\s*(.*)", an)[0]
 
                     sequence_ids, returns, action_mask, completions, think = rollout(
                         model,

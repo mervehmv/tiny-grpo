@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/content/tiny-grpo/train.py", line 376, in <module>
+    main()
+  File "/content/tiny-grpo/train.py", line 274, in main
+    sequence_ids, returns, action_mask, completions, think = rollout(
+                                                             ^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/content/tiny-grpo/train.py", line 137, in rollout
+    elif oracle_answer in answer:
+         ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'in <string>' requires string as left operand, not list
