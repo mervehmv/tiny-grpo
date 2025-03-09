@@ -16,6 +16,7 @@ conda activate grpo
 ```
 pip install -r requirements.txt
 pip install flash-attn --no-build-isolation
+pip install datasets
 ```
 
 3. Play with the source in `train.py`
