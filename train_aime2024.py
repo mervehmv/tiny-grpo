@@ -112,6 +112,7 @@ def rollout(
 
     # 3. determine rewards
     returns = torch.zeros(num_rollouts, 1, dtype=torch.float)
+    response_lengths = torch.zeros(num_rollouts, 1, dtype=torch.float)
     for i, completion in enumerate(completions):
         # search answer tag
         answer_match = re.search(
@@ -141,8 +142,13 @@ def rollout(
                 reward = 0.01
 
         returns[i] = reward
+        if think is not None:
+            response_lengths[i] = len(think)
+        else:
+            response_lengths[i] = 0
 
-    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, think
+
+    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, think, response_lengths
 
 
 def init_rng(seed: int) -> torch.Generator:
@@ -210,13 +216,13 @@ def main():
     model_name = "meta-llama/Llama-3.2-1B-Instruct"
     checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-aime2024/output")
     checkpoint_interval = 20
-    train_batch_size = 16
+    train_batch_size = 8 #16
     lr = 5e-6
     kl_weight = 0.01
     clip_eps = 0.2
 
-    group_size = 12
-    rollouts_per_step = 32
+    group_size = 8 #12
+    rollouts_per_step = 16 #32
     epochs_per_step = 1
     max_norm = 1.0  # gradient clipping
 
@@ -271,7 +277,7 @@ def main():
             with torch.no_grad():
                 for q, a in zip(questions, answers):
                     
-                    sequence_ids, returns, action_mask, completions, think = rollout(
+                    sequence_ids, returns, action_mask, completions, think, response_lengths = rollout(
                         model,
                         tokenizer,
                         q,
@@ -327,6 +333,8 @@ def main():
             episode_return_sum = torch.stack(rollout_returns).sum()
             print(f"returns of step {k}: {episode_return_sum:.4f}")
             wandb.log({"returns": episode_return_sum})
+            wandb.log({"response_lengths": response_lengths.sum()})
+            
 
             experience_sampler = DataLoader(
                 replay_buffer,
