@@ -1,0 +1,15 @@
+{"time":"2025-03-09T20:41:50.649577956Z","level":"INFO","msg":"stream: starting","core version":"0.19.4","symlink path":"/content/tiny-grpo/wandb/run-20250309_204150-falnznmp/logs/debug-core.log"}
+{"time":"2025-03-09T20:41:50.752039724Z","level":"INFO","msg":"created new stream","id":"falnznmp"}
+{"time":"2025-03-09T20:41:50.75207676Z","level":"INFO","msg":"stream: started","id":"falnznmp"}
+{"time":"2025-03-09T20:41:50.752100602Z","level":"INFO","msg":"writer: Do: started","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:41:50.752118182Z","level":"INFO","msg":"sender: started","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:41:50.752167568Z","level":"INFO","msg":"handler: started","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:41:51.003793291Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-09T20:50:10.724434199Z","level":"INFO","msg":"stream: closing","id":"falnznmp"}
+{"time":"2025-03-09T20:50:10.724468686Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-09T20:50:10.725042805Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-09T20:50:11.662836382Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-09T20:50:11.840119697Z","level":"INFO","msg":"handler: closed","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:50:11.840141728Z","level":"INFO","msg":"writer: Close: closed","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:50:11.840154955Z","level":"INFO","msg":"sender: closed","stream_id":"falnznmp"}
+{"time":"2025-03-09T20:50:11.840227363Z","level":"INFO","msg":"stream: closed","id":"falnznmp"}
