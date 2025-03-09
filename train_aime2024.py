@@ -371,8 +371,8 @@ def main():
             ):
                 model.save_pretrained(checkpoint_path / f"step_{k}")
 
-        if checkpoint_path is not None:
-            model.save_pretrained(checkpoint_path / f"step_{k}")
+            if checkpoint_path is not None:
+                model.save_pretrained(checkpoint_path / f"step_{k}")
 
 
 if __name__ == "__main__":
