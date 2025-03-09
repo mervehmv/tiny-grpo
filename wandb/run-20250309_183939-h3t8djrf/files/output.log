@@ -1,0 +1,149 @@
+rollout q='Let $\bigtriangleup PQR$ be a triangle with $\angle P = 75^o$ and $\angle Q = 60^o$ . A regular hexagon $ABCDEF$ with side length 1 is drawn inside $\triangle PQR$ so that side $\overline{AB}$ lies on $\overline{PQ}$ , side $\overline{CD}$ lies on $\overline{QR}$ , and one of the remaining vertices lies on $\overline{RP}$ . There are positive integers $a, b, c,$ and $d$ such that the area of $\triangle PQR$ can be expressed in the form $\frac{a+b\sqrt{c}}{d}$ , where $a$ and $d$ are relatively prime, and c is not divisible by the square of any prime. Find $a+b+c+d$ .', a='21', returns=0.01, replay_buffer_size=0, sequence_ids=torch.Size([8, 1024])
+rollout q='For how many ordered pairs of positive integers $(x,y),$ with $y<x\le 100,$ are both $\frac xy$ and $\frac{x+1}{y+1}$ integers?', a='85', returns=0.02, replay_buffer_size=8, sequence_ids=torch.Size([8, 1024])
+rollout q='Let $a_{0} = 2$ , $a_{1} = 5$ , and $a_{2} = 8$ , and for $n > 2$ define $a_{n}$ recursively to be the remainder when $4(a_{n-1} + a_{n-2} + a_{n-3})$ is divided by $11$ . Find $a_{2018} \cdot a_{2020} \cdot a_{2022}$ .', a='112', returns=0.00, replay_buffer_size=16, sequence_ids=torch.Size([8, 1024])
+rollout q='The solutions to the system of equations \begin{align*} \log_{225}{x}+\log_{64}{y} = 4\\ \log_{x}{225}- \log_{y}{64} = 1 \end{align*} are $(x_1,y_1)$ and $(x_2, y_2)$ . Find $\log_{30}{(x_1y_1x_2y_2)}$ .', a='12', returns=0.00, replay_buffer_size=24, sequence_ids=torch.Size([8, 1024])
+rollout q='A regular hexagon with center at the origin in the complex plane has opposite pairs of sides one unit apart. One pair of sides is parallel to the imaginary axis. Let $R$ be the region outside the hexagon, and let $S = \left\lbrace\frac{1}{z}|z \in R\right\rbrace$ . Then the area of $S$ has the form $a\pi + \sqrt{b}$ , where $a$ and $b$ are positive integers. Find $a + b$ .', a='29', returns=0.00, replay_buffer_size=32, sequence_ids=torch.Size([8, 1024])
+rollout q='A certain function $f$ has the properties that $f(3x) = 3f(x)$ for all positive real values of $x$ , and that $f(x) = 1 - |x - 2|$ for $1\leq x \leq 3$ . Find the smallest $x$ for which $f(x) = f(2001)$ .', a='429', returns=0.00, replay_buffer_size=40, sequence_ids=torch.Size([8, 1024])
+rollout q='Each of the 2001 students at a high school studies either Spanish or French, and some study both. The number who study Spanish is between 80 percent and 85 percent of the school population, and the number who study French is between 30 percent and 40 percent. Let $m$ be the smallest number of students who could study both languages, and let $M$ be the largest number of students who could study both languages. Find $M-m$ .', a='298', returns=0.00, replay_buffer_size=48, sequence_ids=torch.Size([8, 988])
+rollout q='In $\triangle ABC$ , $AB=10$ , $\measuredangle A=30^{\circ}$ , and $\measuredangle C=45^{\circ}$ . Let $H$ , $D$ , and $M$ be points on line $\overline{BC}$ such that $AH\perp BC$ , $\measuredangle BAD=\measuredangle CAD$ , and $BM=CM$ . Point $N$ is the midpoint of segment $HM$ , and point $P$ is on ray $AD$ such that $PN\perp BC$ . Then $AP^2=\frac{m}{n}$ , where $m$ and $n$ are relatively prime positive integers. Find $m+n$ .', a='77', returns=0.03, replay_buffer_size=56, sequence_ids=torch.Size([8, 848])
+rollout q='What is the largest even integer that cannot be written as the sum of two odd composite numbers? ', a='38', returns=0.00, replay_buffer_size=64, sequence_ids=torch.Size([8, 463])
+rollout q='A jar has 10 red candies and 10 blue candies. Terry picks two candies at random, then Mary picks two of the remaining candies at random. Given that the probability that they get the same color combination, irrespective of order, is $m/n,$ where $m$ and $n$ are relatively prime positive integers, find $m+n.$', a='441', returns=0.01, replay_buffer_size=72, sequence_ids=torch.Size([8, 717])
+rollout q='Let $m$ and $n$ be odd integers greater than $1.$ An $m\times n$ rectangle is made up of unit squares where the squares in the top row are numbered left to right with the integers $1$ through $n$ , those in the second row are numbered left to right with the integers $n + 1$ through $2n$ , and so on. Square $200$ is in the top row, and square $2000$ is in the bottom row. Find the number of ordered pairs $(m,n)$ of odd integers greater than $1$ with the property that, in the $m\times n$ rectangle, the line through the centers of squares $200$ and $2000$ intersects the interior of square $1099$ .', a='248', returns=0.04, replay_buffer_size=80, sequence_ids=torch.Size([8, 1024])
+rollout q='The workers in a factory produce widgets and whoosits. For each product, production time is constant and identical for all workers, but not necessarily equal for the two products. In one hour, $100$ workers can produce $300$ widgets and $200$ whoosits. In two hours, $60$ workers can produce $240$ widgets and $300$ whoosits. In three hours, $50$ workers can produce $150$ widgets and $m$ whoosits. Find $m$ .', a='450', returns=0.03, replay_buffer_size=88, sequence_ids=torch.Size([8, 931])
+rollout q='Six congruent circles form a ring with each circle externally tangent to two circles adjacent to it. All circles are internally tangent to a circle $C$ with radius 30. Let $K$ be the area of the region inside circle $C$ and outside of the six circles in the ring. Find $\lfloor K \rfloor.$', a='942', returns=0.01, replay_buffer_size=96, sequence_ids=torch.Size([8, 1024])
+rollout q='As shown in the figure, $\triangle ABC$ is divided into six smaller triangles by lines drawn from the vertices through a common interior point. The areas of four of these triangles are as indicated. Find the area of $\triangle ABC$ . AIME 1985 Problem 6.png', a='315', returns=0.04, replay_buffer_size=104, sequence_ids=torch.Size([8, 326])
+rollout q='Let $a_{10} = 10$ , and for each positive integer $n >10$ let $a_n = 100a_{n - 1} + n$ . Find the least positive $n > 10$ such that $a_n$ is a multiple of $99$ .', a='45', returns=0.02, replay_buffer_size=112, sequence_ids=torch.Size([8, 635])
+rollout q='Triangle $ABC$ has side lengths $AB=4$ , $BC=5$ , and $CA=6$ . Points $D$ and $E$ are on ray $AB$ with $AB<AD<AE$ . The point $F \neq C$ is a point of intersection of the circumcircles of $\triangle ACD$ and $\triangle EBC$ satisfying $DF=2$ and $EF=7$ . Then $BE$ can be expressed as $\tfrac{a+b\sqrt{c}}{d}$ , where $a$ , $b$ , $c$ , and $d$ are positive integers such that $a$ and $d$ are relatively prime, and $c$ is not divisible by the square of any prime. Find $a+b+c+d$ .', a='32', returns=0.01, replay_buffer_size=120, sequence_ids=torch.Size([8, 1024])
+returns of step 0: 0.2200
+0: kl= 0.0000, grad_norm= 3.5312
+0: kl= 0.0028, grad_norm= 5.0938
+0: kl= 0.0019, grad_norm= 3.4062
+0: kl= 0.0015, grad_norm= 14.9375
+0: kl= 0.0025, grad_norm= 17.6250
+0: kl= 0.0056, grad_norm= 5.0312
+0: kl= 0.0020, grad_norm= 7.2188
+0: kl= 0.0025, grad_norm= 9.3750
+0: kl= 0.0036, grad_norm= 2.1719
+0: kl= 0.0011, grad_norm= 8.9375
+0: kl= 0.0025, grad_norm= 2.7969
+0: kl= 0.0012, grad_norm= 6.1875
+0: kl= 0.0011, grad_norm= 4.1875
+0: kl= 0.0012, grad_norm= 5.9375
+0: kl= 0.0011, grad_norm= 12.5625
+0: kl= 0.0010, grad_norm= 3.7812
+rollout q='For how many pairs of consecutive integers in $\{1000,1001,1002^{}_{},\ldots,2000\}$ is no carrying required when the two integers are added?', a='156', returns=0.01, replay_buffer_size=0, sequence_ids=torch.Size([8, 1024])
+rollout q='In triangle $ABC$ , point $D$ is on $\overline{BC}$ with $CD=2$ and $DB=5$ , point $E$ is on $\overline{AC}$ with $CE=1$ and $EA=3$ , $AB=8$ , and $\overline{AD}$ and $\overline{BE}$ intersect at $P$ . Points $Q$ and $R$ lie on $\overline{AB}$ so that $\overline{PQ}$ is parallel to $\overline{CA}$ and $\overline{PR}$ is parallel to $\overline{CB}$ . It is given that the ratio of the area of triangle $PQR$ to the area of triangle $ABC$ is $m/n$ , where $m$ and $n$ are relatively prime positive integers. Find $m+n$ .', a='901', returns=0.04, replay_buffer_size=8, sequence_ids=torch.Size([8, 682])
+rollout q='Define a positive integer $n^{}_{}$ to be a factorial tail if there is some positive integer $m^{}_{}$ such that the decimal representation of $m!$ ends with exactly $n$ zeroes. How many positive integers less than $1992$ are not factorial tails?', a='396', returns=0.01, replay_buffer_size=16, sequence_ids=torch.Size([8, 898])
+rollout q='For positive integers $N$ and $k$ , define $N$ to be $k$ -nice if there exists a positive integer $a$ such that $a^{k}$ has exactly $N$ positive divisors. Find the number of positive integers less than $1000$ that are neither $7$ -nice nor $8$ -nice.', a='749', returns=0.04, replay_buffer_size=24, sequence_ids=torch.Size([8, 1008])
+rollout q='Let $p_{}$ be the probability that, in the process of repeatedly flipping a fair coin, one will encounter a run of 5 heads before one encounters a run of 2 tails.  Given that $p_{}$ can be written in the form $m/n$ where $m_{}$ and $n_{}$ are relatively prime positive integers, find $m+n$ .', a='37', returns=0.03, replay_buffer_size=32, sequence_ids=torch.Size([8, 686])
+rollout q='The increasing sequence $1,3,4,9,10,12,13\cdots$ consists of all those positive integers which are powers of 3 or sums of distinct powers of 3. Find the $100^{\mbox{th}}$ term of this sequence.', a='981', returns=0.06, replay_buffer_size=40, sequence_ids=torch.Size([8, 567])
+rollout q='Consider arrangements of the $9$ numbers $1, 2, 3, \dots, 9$ in a $3 \times 3$ array. For each such arrangement, let $a_1$ , $a_2$ , and $a_3$ be the medians of the numbers in rows $1$ , $2$ , and $3$ respectively, and let $m$ be the median of $\{a_1, a_2, a_3\}$ . Let $Q$ be the number of arrangements for which $m = 5$ . Find the remainder when $Q$ is divided by $1000$ .', a='360', returns=0.02, replay_buffer_size=48, sequence_ids=torch.Size([8, 957])
+rollout q='In a game of Chomp , two players alternately take bites from a 5-by-7 grid of unit squares. To take a bite, a player chooses one of the remaining squares, then removes ("eats") all squares in the quadrant defined by the left edge (extended upward) and the lower edge (extended rightward) of the chosen square. For example, the bite determined by the shaded square in the diagram would remove the shaded square and the four squares marked by $\times.$ (The squares with two or more dotted edges have been removed from the original board in previous moves.) AIME 1992 Problem 12.png The object of the game is to make one's opponent take the last bite. The diagram shows one of the many subsets of the set of 35 unit squares that can occur during the game of Chomp. How many different subsets are there in all? Include the full board and empty board in your count.', a='792', returns=0.04, replay_buffer_size=56, sequence_ids=torch.Size([8, 625])
+rollout q='During a recent campaign for office, a candidate made a tour of a country which we assume lies in a plane. On the first day of the tour he went east, on the second day he went north, on the third day west, on the fourth day south, on the fifth day east, etc. If the candidate went $\frac{n^{2}}{2}$ miles on the $n^{\mbox{th}}_{}$ day of this tour, how many miles was he from his starting point at the end of the $40^{\mbox{th}}_{}$ day?', a='580', returns=0.03, replay_buffer_size=64, sequence_ids=torch.Size([8, 880])
+rollout q='Find the number of integers $c$ such that the equation \[\left||20|x|-x^2|-c\right|=21\] has $12$ distinct real solutions.', a='57', returns=0.02, replay_buffer_size=72, sequence_ids=torch.Size([8, 1024])
+rollout q='The terms of an arithmetic sequence add to $715$ . The first term of the sequence is increased by $1$ , the second term is increased by $3$ , the third term is increased by $5$ , and in general, the $k$ th term is increased by the $k$ th odd positive integer. The terms of the new sequence add to $836$ . Find the sum of the first, last, and middle term of the original sequence.', a='195', returns=0.02, replay_buffer_size=80, sequence_ids=torch.Size([8, 1024])
+rollout q='An integer between $1000$ and $9999,$ inclusive, is called balanced if the sum of its two leftmost digits equals the sum of its two rightmost digits. How many balanced integers are there?', a='615', returns=0.06, replay_buffer_size=88, sequence_ids=torch.Size([8, 484])
+rollout q='Let $\triangle ABC$ be an isosceles triangle with $\angle A = 90^\circ.$ There exists a point $P$ inside $\triangle ABC$ such that $\angle PAB = \angle PBC = \angle PCA$ and $AP = 10.$ Find the area of $\triangle ABC.$', a='250', returns=0.03, replay_buffer_size=96, sequence_ids=torch.Size([8, 807])
+rollout q='In the diagram below, angle $ABC$ is a right angle. Point $D$ is on $\overline{BC}$ , and $\overline{AD}$ bisects angle $CAB$ . Points $E$ and $F$ are on $\overline{AB}$ and $\overline{AC}$ , respectively, so that $AE=3$ and $AF=10$ . Given that $EB=9$ and $FC=27$ , find the integer closest to the area of quadrilateral $DCFG$ . [asy] size(250); pair A=(0,12), E=(0,8), B=origin, C=(24*sqrt(2),0), D=(6*sqrt(2),0), F=A+10*dir(A--C), G=intersectionpoint(E--F, A--D); draw(A--B--C--A--D^^E--F); pair point=G+1*dir(250); label("$A$", A, dir(point--A)); label("$B$", B, dir(point--B)); label("$C$", C, dir(point--C)); label("$D$", D, dir(point--D)); label("$E$", E, dir(point--E)); label("$F$", F, dir(point--F)); label("$G$", G, dir(point--G)); markscalefactor=0.1; draw(rightanglemark(A,B,C)); label("10", A--F, dir(90)*dir(A--F)); label("27", F--C, dir(90)*dir(F--C)); label("3", (0,10), W); label("9", (0,4), W); [/asy]', a='148', returns=0.01, replay_buffer_size=104, sequence_ids=torch.Size([8, 984])
+rollout q='Let $\overline{MN}$ be a diameter of a circle with diameter $1$ . Let $A$ and $B$ be points on one of the semicircular arcs determined by $\overline{MN}$ such that $A$ is the midpoint of the semicircle and $MB=\dfrac 35$ . Point $C$ lies on the other semicircular arc. Let $d$ be the length of the line segment whose endpoints are the intersections of diameter $\overline{MN}$ with the chords $\overline{AC}$ and $\overline{BC}$ . The largest possible value of $d$ can be written in the form $r-s\sqrt t$ , where $r$ , $s$ , and $t$ are positive integers and $t$ is not divisible by the square of any prime. Find $r+s+t$ .', a='14', returns=0.03, replay_buffer_size=112, sequence_ids=torch.Size([8, 1024])
+rollout q='On a long straight stretch of one-way single-lane highway, cars all travel at the same speed and all obey the safety rule: the distance from the back of the car ahead to the front of the car behind is exactly one car length for each 15 kilometers per hour of speed or fraction thereof (Thus the front of a car traveling 52 kilometers per hour will be four car lengths behind the back of the car in front of it.) A photoelectric eye by the side of the road counts the number of cars that pass in one hour. Assuming that each car is 4 meters long and that the cars can travel at any speed, let $M$ be the maximum whole number of cars that can pass the photoelectric eye in one hour. Find the quotient when $M$ is divided by 10.', a='375', returns=0.04, replay_buffer_size=120, sequence_ids=torch.Size([8, 582])
+returns of step 1: 0.4900
+0: kl= 0.0007, grad_norm= 12.8125
+0: kl= 0.0011, grad_norm= 5.3750
+0: kl= 0.0010, grad_norm= 5.7188
+0: kl= 0.0010, grad_norm= 21.7500
+0: kl= 0.0009, grad_norm= 7.5625
+0: kl= 0.0021, grad_norm= 7.4688
+0: kl= 0.0011, grad_norm= 9.5000
+0: kl= 0.0013, grad_norm= 4.8125
+0: kl= 0.0010, grad_norm= 8.3750
+0: kl= 0.0019, grad_norm= 6.8750
+0: kl= 0.0016, grad_norm= 10.1250
+0: kl= 0.0018, grad_norm= 21.8750
+0: kl= 0.0011, grad_norm= 17.6250
+0: kl= 0.0012, grad_norm= 7.3438
+0: kl= 0.0010, grad_norm= 8.3125
+0: kl= 0.0018, grad_norm= 6.1875
+rollout q='There exist $r$ unique nonnegative integers $n_1 > n_2 > \cdots > n_r$ and $r$ integers $a_k$ ( $1\le k\le r$ ) with each $a_k$ either $1$ or $- 1$ such that \[a_13^{n_1} + a_23^{n_2} + \cdots + a_r3^{n_r} = 2008.\] Find $n_1 + n_2 + \cdots + n_r$ .', a='21', returns=0.03, replay_buffer_size=0, sequence_ids=torch.Size([8, 1024])
+rollout q='The perimeter of triangle $APM$ is $152$ , and the angle $PAM$ is a right angle. A circle of radius $19$ with center $O$ on $\overline{AP}$ is drawn so that it is tangent to $\overline{AM}$ and $\overline{PM}$ . Given that $OP=m/n$ where $m$ and $n$ are relatively prime positive integers, find $m+n$ .', a='98', returns=0.03, replay_buffer_size=8, sequence_ids=torch.Size([8, 742])
+rollout q='There is a polynomial $P(x)$ with integer coefficients such that \[P(x)=\frac{(x^{2310}-1)^6}{(x^{105}-1)(x^{70}-1)(x^{42}-1)(x^{30}-1)}\] holds for every $0<x<1.$ Find the coefficient of $x^{2022}$ in $P(x)$ .', a='220', returns=0.04, replay_buffer_size=16, sequence_ids=torch.Size([8, 1024])
+rollout q='Rudolph bikes at a constant rate and stops for a five-minute break at the end of every mile. Jennifer bikes at a constant rate which is three-quarters the rate that Rudolph bikes, but Jennifer takes a five-minute break at the end of every two miles. Jennifer and Rudolph begin biking at the same time and arrive at the $50$ -mile mark at exactly the same time. How many minutes has it taken them?', a='620', returns=0.03, replay_buffer_size=24, sequence_ids=torch.Size([8, 979])
+rollout q='Consider the set of all triangles $OPQ$ where $O$ is the origin and $P$ and $Q$ are distinct points in the plane with nonnegative integer coordinates $(x,y)$ such that $41x + y = 2009$ . Find the number of such distinct triangles whose area is a positive integer.', a='600', returns=0.04, replay_buffer_size=32, sequence_ids=torch.Size([8, 998])
+rollout q='In right triangle $ABC$ with right angle $C$ , $CA = 30$ and $CB = 16$ .  Its legs $CA$ and $CB$ are extended beyond $A$ and $B$ .  Points $O_1$ and $O_2$ lie in the exterior of the triangle and are the centers of two circles with equal radii.  The circle with center $O_1$ is tangent to the hypotenuse and to the extension of leg $CA$ , the circle with center $O_2$ is tangent to the hypotenuse and to the extension of leg $CB$ , and the circles are externally tangent to each other.  The length of the radius of either circle can be expressed as $p/q$ , where $p$ and $q$ are relatively prime positive integers.  Find $p+q$ .', a='737', returns=0.03, replay_buffer_size=40, sequence_ids=torch.Size([8, 1024])
+Traceback (most recent call last):
+  File "/content/tiny-grpo/train_aime2024.py", line 289, in main
+    sequence_ids, returns, action_mask, completions, think, response_lengths = rollout(
+                                                                               ^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/content/tiny-grpo/train_aime2024.py", line 103, in rollout
+    sequence_ids = model.generate(**model_inputs, generation_config=generation_config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/generation/utils.py", line 2255, in generate
+    result = self._sample(
+             ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/generation/utils.py", line 3257, in _sample
+    outputs = model_forward(**model_inputs, return_dict=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/models/llama/modeling_llama.py", line 831, in forward
+    outputs = self.model(
+              ^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/models/llama/modeling_llama.py", line 589, in forward
+    layer_outputs = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/models/llama/modeling_llama.py", line 332, in forward
+    hidden_states, self_attn_weights = self.self_attn(
+                                       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/models/llama/modeling_llama.py", line 288, in forward
+    attn_output, attn_weights = attention_interface(
+                                ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/integrations/flash_attention.py", line 50, in flash_attention_forward
+    attn_output = _flash_attention_forward(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/transformers/modeling_flash_attention_utils.py", line 364, in _flash_attention_forward
+    attn_output = flash_attn_func(
+                  ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/flash_attn/flash_attn_interface.py", line 1201, in flash_attn_func
+    return FlashAttnFunc.apply(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/dist-packages/torch/autograd/function.py", line 575, in apply
+    return super().apply(*args, **kwargs)  # type: ignore[misc]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/content/tiny-grpo/train_aime2024.py", line 393, in <module>
+    main()
+  File "/content/tiny-grpo/train_aime2024.py", line 275, in main
+    with open("/content/drive/MyDrive/tiny-grpo-aime2024/thought_processes.txt", "a", encoding="utf-8") as file:
+KeyboardInterrupt

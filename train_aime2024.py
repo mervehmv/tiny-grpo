@@ -276,11 +276,13 @@ def main():
         for k, prompt_batch in enumerate(prompt_loader):
             file.write(f"Step{k}\n\n")
             rollout_returns = []
+            rollout_lens = []
 
             replay_buffer.clear()
 
-            questions = prompt_batch["Question"]
-            answers = prompt_batch["Answer"]
+            questions = [item["Question"] for item in prompt_batch]
+            answers = [item["Answer"] for item in prompt_batch]
+
 
             with torch.no_grad():
                 for q, a in zip(questions, answers):
@@ -305,6 +307,7 @@ def main():
                     os.sync()
 
                     rollout_returns.append(returns.cpu())
+                    rollout_lens.append(len(response_lengths.cpu()))
 
                     advantages = group_advantages(returns)
                     attention_mask = sequence_ids != pad_token_id
@@ -339,9 +342,10 @@ def main():
 
             torch.cuda.empty_cache()
             episode_return_sum = torch.stack(rollout_returns).sum()
+            episode_len_sum = torch.stack(rollout_lens).sum()
             print(f"returns of step {k}: {episode_return_sum:.4f}")
             wandb.log({"returns": episode_return_sum})
-            wandb.log({"response_lengths": response_lengths.sum()})
+            wandb.log({"response_lengths": episode_len_sum.sum()})
             
 
             experience_sampler = DataLoader(

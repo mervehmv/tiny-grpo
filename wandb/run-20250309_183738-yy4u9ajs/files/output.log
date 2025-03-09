@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/content/tiny-grpo/train_aime2024.py", line 392, in <module>
+    main()
+  File "/content/tiny-grpo/train_aime2024.py", line 282, in main
+    questions = prompt_batch["Question"]
+                ~~~~~~~~~~~~^^^^^^^^^^^^
+TypeError: list indices must be integers or slices, not str
