@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 import random
 import re
+import os
 from typing import Any, Iterator, Optional
 import wandb
 import torch
@@ -287,6 +288,9 @@ def main():
                     )
 
                     file.write(f"Question\n{q}\nThink\n{think}\nAnswer\n{a}\n\n")
+
+                    os.sync()
+
                     rollout_returns.append(returns.cpu())
 
                     advantages = group_advantages(returns)
