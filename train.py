@@ -112,6 +112,7 @@ def rollout(
 
     # 3. determine rewards
     returns = torch.zeros(num_rollouts, 1, dtype=torch.float)
+    response_lengths = torch.zeros(num_rollouts, 1, dtype=torch.float)
     for i, completion in enumerate(completions):
         # search answer tag
         answer_match = re.search(
@@ -121,14 +122,6 @@ def rollout(
         )
 
         answer = answer_match.group(1) if answer_match else None
-
-        think_match = re.search(
-            r"<think>(.*?)<answer>",
-            completion,
-            flags=re.DOTALL,
-        )
-
-        think = think_match.group(1) if think_match else None
 
 
         reward = 0
@@ -141,8 +134,9 @@ def rollout(
                 reward = 0.01
 
         returns[i] = reward
+        response_lengths[i] = len(completion)
 
-    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, think
+    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, response_lengths, answer
 
 
 def init_rng(seed: int) -> torch.Generator:
@@ -208,15 +202,15 @@ def main():
     wandb_project = "tiny_grpo_gsmk8_v2"
     device_index = 0
     model_name = "meta-llama/Llama-3.2-1B-Instruct"
-    checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-gsmk8/output")
+    checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-gsmk8/output2")
     checkpoint_interval = 20
     train_batch_size = 16
     lr = 5e-6
     kl_weight = 0.01
     clip_eps = 0.2
 
-    group_size = 12
-    rollouts_per_step = 32
+    group_size = 8 #12
+    rollouts_per_step = 16 #32
     epochs_per_step = 1
     max_norm = 1.0  # gradient clipping
 
@@ -258,10 +252,12 @@ def main():
         wandb.init(mode="disabled")
     else:
         wandb.init(project=wandb_project)
-    with open("/content/drive/MyDrive/tiny-grpo-gsmk8/thought_processes.txt", "a", encoding="utf-8") as file:
+    with open("/content/drive/MyDrive/tiny-grpo-gsmk8/thought_processes2.txt", "a", encoding="utf-8") as file:
         for k, prompt_batch in enumerate(prompt_loader):
             file.write(f"Step{k}\n\n")
             rollout_returns = []
+            rollout_lens = []
+
 
             replay_buffer.clear()
 
@@ -272,7 +268,7 @@ def main():
                 for q, an in zip(questions, answers):
                     a = re.findall(r"####\s*(.*)", an)[0]
 
-                    sequence_ids, returns, action_mask, completions, think = rollout(
+                    sequence_ids, returns, action_mask, completions, response_lengths, ans = rollout(
                         model,
                         tokenizer,
                         q,
@@ -287,11 +283,12 @@ def main():
                         f"rollout q='{q}', a='{a}', returns={returns.sum().item():.2f}, replay_buffer_size={len(replay_buffer)}, sequence_ids={sequence_ids.shape}"
                     )
 
-                    file.write(f"Question\n{q}\nThink\n{think}\nAnswer\n{a}\n\n")
+                    file.write(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
 
                     os.sync()
 
                     rollout_returns.append(returns.cpu())
+                    rollout_lens.append(response_lengths.cpu())
 
                     advantages = group_advantages(returns)
                     attention_mask = sequence_ids != pad_token_id
@@ -328,6 +325,15 @@ def main():
             episode_return_sum = torch.stack(rollout_returns).sum()
             print(f"returns of step {k}: {episode_return_sum:.4f}")
             wandb.log({"returns": episode_return_sum})
+
+            if len(rollout_lens) > 0:
+                episode_len_sum = torch.stack(rollout_lens).mean()
+            else:
+                episode_len_sum = torch.tensor(0.0)  # Prevent error if rollout_lens is empty
+
+            wandb.log({"response_lengths": episode_len_sum})
+            
+            
 
             experience_sampler = DataLoader(
                 replay_buffer,
