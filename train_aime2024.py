@@ -205,7 +205,7 @@ def read_prompts(
 
 def main():
     seed = 42
-    wandb_project = "tiny_grpo_gsmk8_v2"
+    wandb_project = "tiny_grpo_aime2024"
     device_index = 0
     model_name = "meta-llama/Llama-3.2-1B-Instruct"
     checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-aime2024/output")
