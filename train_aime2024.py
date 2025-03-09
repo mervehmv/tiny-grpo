@@ -208,6 +208,11 @@ def read_prompts(
             break
     return rows
 
+def collate_fn(batch):
+    batch = [x for x in batch if x is not None]  # Remove None values
+    if len(batch) == 0:
+        return None  # Return None if batch is empty
+    return batch  # Otherwise, return the cleaned batch
 
 def main():
     seed = 42
@@ -257,6 +262,7 @@ def main():
         shuffle=True,
         drop_last=True,
         pin_memory=False,
+        collate_fn=collate_fn
     )
 
     replay_buffer = ReplayBuffer()
