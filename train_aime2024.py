@@ -240,7 +240,7 @@ def main():
 
     pad_token_id = tokenizer.eos_token_id
 
-    dataset = load_dataset("Maxwell-Jia/AIME_2024")
+    dataset = load_dataset("di-zhang-fdu/AIME_1983_2024")
     train_data = dataset["train"]
 
     prompt_loader = DataLoader(
@@ -265,7 +265,7 @@ def main():
 
             replay_buffer.clear()
 
-            questions = prompt_batch["Problem"]
+            questions = prompt_batch["Question"]
             answers = prompt_batch["Answer"]
 
             with torch.no_grad():
@@ -370,9 +370,6 @@ def main():
                 and (k + 1) % checkpoint_interval == 0
             ):
                 model.save_pretrained(checkpoint_path / f"step_{k}")
-
-            #if checkpoint_path is not None:
-                #model.save_pretrained(checkpoint_path / f"step_{k}")
 
 
 if __name__ == "__main__":

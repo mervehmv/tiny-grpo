@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/content/tiny-grpo/train_aime2024.py", line 379, in <module>
+    main()
+  File "/content/tiny-grpo/train_aime2024.py", line 375, in main
+    model.save_pretrained(checkpoint_path / f"step_{k}")
+                                                    ^
+UnboundLocalError: cannot access local variable 'k' where it is not associated with a value

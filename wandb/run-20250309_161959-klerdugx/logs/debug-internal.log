@@ -1,0 +1,15 @@
+{"time":"2025-03-09T16:19:59.90213071Z","level":"INFO","msg":"stream: starting","core version":"0.19.4","symlink path":"/content/tiny-grpo/wandb/run-20250309_161959-klerdugx/logs/debug-core.log"}
+{"time":"2025-03-09T16:20:00.004249064Z","level":"INFO","msg":"created new stream","id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.004297616Z","level":"INFO","msg":"stream: started","id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.004321938Z","level":"INFO","msg":"writer: Do: started","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.004331775Z","level":"INFO","msg":"handler: started","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.004363414Z","level":"INFO","msg":"sender: started","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.248066559Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-03-09T16:20:00.657739829Z","level":"INFO","msg":"stream: closing","id":"klerdugx"}
+{"time":"2025-03-09T16:20:00.657765127Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-03-09T16:20:00.658305939Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-03-09T16:20:01.486801419Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-03-09T16:20:01.674611392Z","level":"INFO","msg":"handler: closed","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:01.674651816Z","level":"INFO","msg":"writer: Close: closed","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:01.674691059Z","level":"INFO","msg":"sender: closed","stream_id":"klerdugx"}
+{"time":"2025-03-09T16:20:01.674723134Z","level":"INFO","msg":"stream: closed","id":"klerdugx"}
