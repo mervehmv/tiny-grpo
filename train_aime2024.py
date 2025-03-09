@@ -129,7 +129,7 @@ def rollout(
             flags=re.DOTALL,
         )
 
-        think = think_match.group(1) if think_match else None
+        think = think_match.group(1) if think_match else ""
 
 
         reward = 0
@@ -142,11 +142,7 @@ def rollout(
                 reward = 0.01
 
         returns[i] = reward
-        if think is not None:
-            response_lengths[i] = len(think)
-        else:
-            response_lengths[i] = 0
-
+        response_lengths[i] = len(think)
 
     return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, think, response_lengths
 
@@ -307,7 +303,7 @@ def main():
                     os.sync()
 
                     rollout_returns.append(returns.cpu())
-                    rollout_lens.append(len(response_lengths.cpu()))
+                    rollout_lens.append(response_lengths.cpu())
 
                     advantages = group_advantages(returns)
                     attention_mask = sequence_ids != pad_token_id
@@ -342,9 +338,15 @@ def main():
 
             torch.cuda.empty_cache()
             episode_return_sum = torch.stack(rollout_returns).sum()
-            episode_len_sum = torch.stack(rollout_lens).sum()
+
             print(f"returns of step {k}: {episode_return_sum:.4f}")
             wandb.log({"returns": episode_return_sum})
+            
+            if len(rollout_lens) > 0:
+                episode_len_sum = torch.stack(rollout_lens).sum()
+            else:
+                episode_len_sum = torch.tensor(0.0)  # Prevent error if rollout_lens is empty
+
             wandb.log({"response_lengths": episode_len_sum.sum()})
             
 
