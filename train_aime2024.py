@@ -300,7 +300,7 @@ def main():
                         f"rollout q='{q}', a='{a}', returns={returns.sum().item():.2f}, replay_buffer_size={len(replay_buffer)}, sequence_ids={sequence_ids.shape}"
                     )
 
-                    file.write(f"Question\n{q}\nThink\n{completions}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
+                    file.write(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
 
                     os.sync()
 
