@@ -202,8 +202,8 @@ def main():
     wandb_project = "tiny_grpo_gsmk8_v2"
     device_index = 0
     model_name = "meta-llama/Llama-3.2-1B-Instruct"
-    checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-gsmk8/output2")
-    checkpoint_interval = 20
+    checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-gsmk8/output3")
+    checkpoint_interval = 50
     train_batch_size = 16
     lr = 5e-6
     kl_weight = 0.01
@@ -215,7 +215,7 @@ def main():
     max_norm = 1.0  # gradient clipping
 
     # rollout params
-    max_length = 1024
+    max_length = 2048
     top_p = 1.0
     temperature = 1.0
 
@@ -234,6 +234,8 @@ def main():
 
     pad_token_id = tokenizer.eos_token_id
 
+    """
+    # GSM8K DATASET
     dataset = load_dataset("gsm8k", "main")
     train_data = dataset["train"]
 
@@ -244,6 +246,25 @@ def main():
         drop_last=True,
         pin_memory=False,
     )
+    """
+
+
+    prompts = read_prompts(
+        "/content/tiny-grpo/data/math_tasks.jsonl",
+        predicate=lambda x: len(x["question"]) < 128
+        and x["num_terms"] <= 3
+        and x["num_digits"] <= 3,
+        max_rows=64 * 1024,
+    )
+    print(f"found {len(prompts)} matching prompts")
+    prompt_loader = DataLoader(
+        prompts,
+        batch_size=rollouts_per_step,
+        shuffle=True,
+        drop_last=True,
+        pin_memory=False,
+    )
+
 
     replay_buffer = ReplayBuffer()
     objective = GRPOLoss(clip_eps=clip_eps, kl_weight=kl_weight)
@@ -252,8 +273,9 @@ def main():
         wandb.init(mode="disabled")
     else:
         wandb.init(project=wandb_project)
-    with open("/content/drive/MyDrive/tiny-grpo-gsmk8/thought_processes2.txt", "a", encoding="utf-8") as file:
+    with open("/content/drive/MyDrive/tiny-grpo-gsmk8/thought_processes3.txt", "a", encoding="utf-8") as file:
         for k, prompt_batch in enumerate(prompt_loader):
+
             file.write(f"Step{k}\n\n")
             rollout_returns = []
             rollout_lens = []
@@ -265,9 +287,7 @@ def main():
             answers = prompt_batch["answer"]
 
             with torch.no_grad():
-                for q, an in zip(questions, answers):
-                    a = re.findall(r"####\s*(.*)", an)[0]
-
+                for q, a in zip(questions, answers):
                     sequence_ids, returns, action_mask, completions, response_lengths, ans = rollout(
                         model,
                         tokenizer,
@@ -282,6 +302,7 @@ def main():
                     print(
                         f"rollout q='{q}', a='{a}', returns={returns.sum().item():.2f}, replay_buffer_size={len(replay_buffer)}, sequence_ids={sequence_ids.shape}"
                     )
+
 
                     file.write(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
 
