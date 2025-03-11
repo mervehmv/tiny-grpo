@@ -112,6 +112,7 @@ def rollout(
 
     # 3. determine rewards
     returns = torch.zeros(num_rollouts, 1, dtype=torch.float)
+    answers_list = []
     response_lengths = torch.zeros(num_rollouts, 1, dtype=torch.float)
     for i, completion in enumerate(completions):
         # search answer tag
@@ -121,7 +122,8 @@ def rollout(
             flags=re.DOTALL,
         )
 
-        answer = answer_match.group(1) if answer_match else None
+        answer = answer_match.group(1) if answer_match else ""
+        
 
 
         reward = 0
@@ -135,8 +137,9 @@ def rollout(
 
         returns[i] = reward
         response_lengths[i] = len(completion)
+        answers_list.append(answer)
 
-    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, response_lengths, answer
+    return sequence_ids, returns.to(sequence_ids.device), action_mask, completions, response_lengths, answers_list
 
 
 def init_rng(seed: int) -> torch.Generator:
@@ -208,7 +211,8 @@ def main():
                     )
 
 
-                    file.write(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
+                    for i, comp in enumerate(completions):
+                        file.write(f"Rollout {i+1}\nThink\n{comp}\nAnswer\n{ans[i]}\nOracle Answer\n{a}\n\n")
 
                     os.sync()
 
