@@ -40,7 +40,7 @@ def load_model(
 
 # DeepSeek Zero system prompt
 system_prompt = """A conversation between User and Assistant. The user asks a question, and the Assistant solves it.
-The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> reasoning process here </think>
+The assistant first thinks about the reasoning process in the mind and then provides the user with the answer. The reasoning process and answer are enclosed within <think> </think> and <answer> </answer> tags, respectively, i.e., <think> English reasoning process here </think>
 <answer> answer here </answer>
 """
 
@@ -166,6 +166,9 @@ def main():
     top_p = 1.0
     temperature = 1.0
 
+    correct = 0
+    total = 0
+
     device = torch.device("cuda", device_index)
     cpu_device = torch.device("cpu")
     init_rng(seed)
@@ -215,9 +218,17 @@ def main():
                         file.write(f"Rollout {i+1}\nThink\n{comp}\nAnswer\n{ans[i]}\nOracle Answer\n{a}\n\n")
 
                     os.sync()
+            if(returns.sum().item() >= 0.5):
+                correct += 1
+            total += 1
+            
 
                     
             torch.cuda.empty_cache()
+        accuracy = correct/ total
+        print(accuracy)
+        print(correct)
+        print(total)
             
 
 if __name__ == "__main__":
