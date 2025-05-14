@@ -113,53 +113,63 @@ def rollout(
     top_p: float = 1.0,
 ):
     model.eval()
-
-    # Prepare the prompt
     chat_messages = [
         {
-            "role": "system",
-            "content": system_prompt,
-        },
-        {
             "role": "user",
-            "content": task,
-        },
+            "content": [
+                {"type": "image"},  # tells tokenizer to insert <|image|>
+                {"type": "text", "text": task},  # your question/task string
+            ]
+        }
     ]
     chat_prompt = tokenizer.apply_chat_template(
         chat_messages, tokenize=False, add_generation_prompt=True
     )
+    #chat_prompt = "<|image|>\n" + chat_prompt  # <-- add this line
+
 
     processed_inputs = processor(
         text=chat_prompt,
         images=image,
         return_tensors="pt",
         padding=True,
-    ).to("cuda")
+    )
 
+    # Move tensors to CUDA **after** extracting grid_thw
     image_tensor = processed_inputs["pixel_values"]
+    input_ids = processed_inputs["input_ids"]
+    attention_mask = processed_inputs["attention_mask"]
+    image_grid_thw = processed_inputs.get("image_grid_thw")
 
+    # Repeat tensors for rollouts
+    input_ids = input_ids.repeat(num_rollouts, 1).to("cuda")
+    attention_mask = attention_mask.repeat(num_rollouts, 1).to("cuda")
+    image_tensor = image_tensor.repeat(num_rollouts, 1, 1, 1).to("cuda")
+    # If shape is [1, 3], repeat it to [B, 3]
+    image_grid_thw = image_grid_thw.expand(num_rollouts, -1).to("cuda")
 
-
-    # Duplicate inputs for multiple rollouts
-    input_ids = processed_inputs["input_ids"].repeat(num_rollouts, 1)
-    processed_inputs["input_ids"] = input_ids
-    processed_inputs["attention_mask"] = processed_inputs["attention_mask"].repeat(num_rollouts, 1)
-    image_tensor = image_tensor.repeat(num_rollouts, 1, 1, 1)
-
+    
     # Generate responses
     pad_token_id = tokenizer.eos_token_id
     generation_config = GenerationConfig(
         do_sample=True,
         top_p=top_p,
         temperature=temperature,
-        max_new_tokens=128,
+        max_new_tokens=256,
         pad_token_id=tokenizer.eos_token_id,
     )
+
+    # Generate with image + grid info
     sequence_ids = model.generate(
-        input_ids=processed_inputs["input_ids"],
-        attention_mask=processed_inputs["attention_mask"],
+        input_ids=input_ids,
+        attention_mask=attention_mask,
+        pixel_values=image_tensor,
+        image_grid_thw=image_grid_thw,
         generation_config=generation_config,
     )
+
+
+
     completions = tokenizer.batch_decode(
         sequence_ids[:, processed_inputs["input_ids"].shape[1]:], skip_special_tokens=True
     )
@@ -203,19 +213,19 @@ def main():
     model_name = "Qwen/Qwen2-VL-2B-Instruct"
     checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-mllm/checkpoints")
     checkpoint_interval = 50
-    train_batch_size = 16
+    train_batch_size = 4
     lr = 5e-6
     kl_weight = 0.01
     clip_eps = 0.2
 
     group_size = 4
-    rollouts_per_step = 8
+    rollouts_per_step = 4
     epochs_per_step = 1
     max_norm = 1.0
 
     max_length = 256
     top_p = 1.0
-    temperature = 1.0
+    temperature = 0.7
 
     device = torch.device("cuda", device_index)
     cpu_device = torch.device("cpu")
@@ -237,7 +247,7 @@ def main():
     prompt_loader = DataLoader(
         dataset,
         batch_size=rollouts_per_step,
-        shuffle=True,
+        shuffle=False,
         drop_last=True,
         pin_memory=False,
         collate_fn=collate_fn,
@@ -298,11 +308,14 @@ def main():
                         file.write(f"Extracted Answer: {answer}\n")
                         file.write(f"Assigned Reward: {reward_val:.3f}\n")
 
+                        print(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{answer}\nOracle Answer\n{a}\n\n")
+
+
                     file.write("====================================\n\n")
                     file.flush()
                     os.fsync(file.fileno())
 
-                    print(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
+                    #print(f"Question\n{q}\nThink\n{completions[0]}\nAnswer\n{ans}\nOracle Answer\n{a}\n\n")
 
                     os.sync()
 
