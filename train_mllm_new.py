@@ -213,7 +213,7 @@ def main():
     model_name = "Qwen/Qwen2-VL-2B-Instruct"
     checkpoint_path = Path("/content/drive/MyDrive/tiny-grpo-mllm/checkpoints")
     checkpoint_interval = 50
-    train_batch_size = 4
+    train_batch_size = 2
     lr = 5e-6
     kl_weight = 0.01
     clip_eps = 0.2
@@ -300,8 +300,8 @@ def main():
                         else:
                             answer = completion.strip().splitlines()[-1].strip()
 
-                        image_filename = f"/content/drive/MyDrive/tiny-grpo-mllm/images/question_{k}_{i}.png"
-                        img.save(image_filename)
+                        #image_filename = f"/content/drive/MyDrive/tiny-grpo-mllm/images/question_{k}_{i}.png"
+                        #img.save(image_filename)
 
                         file.write(f"\n--- Completion #{i+1} ---\n")
                         file.write(f"{completion.strip()}\n")
